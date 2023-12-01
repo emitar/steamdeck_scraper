@@ -7,7 +7,7 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
 import telebot
 
-#telbot variables
+#telebot variables
 token = 'YOUR_TOKEN'
 chat_id = 'YOUR_CHAT_ID'
 

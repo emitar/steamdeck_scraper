@@ -18,7 +18,7 @@ Assuming you already have Python installed, below are the steps I took on Ubuntu
    ```bash
    pip install selenium webdriver-manager pytelegrambotapi
 
-3. After downloading the code, simply substitute your Telegram bot data to receive notifications when the Steam Deck becomes available for purchase.
+3. After downloading the code, simply substitute your Telegram bot data to receive notifications when the Steam Deck becomes available for purchase. Edit the 'expected_storage' variable if you are interested in a specific version (e.g., 64, 256, 512)
 
 4. **Run script**
    ```bash

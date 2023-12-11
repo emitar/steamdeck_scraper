@@ -11,6 +11,9 @@ import telebot
 token = 'YOUR_TOKEN'
 chat_id = 'YOUR_CHAT_ID'
 
+#Expected storage, leave blank if you don't care. (ex. 64, 256, 512)
+expected_storage=''
+
 #options settings
 options = Options()
 options.add_argument('--headless')
@@ -33,19 +36,28 @@ def send_msg(msg):
 
 def check_stock():
     try:
+        now = datetime.datetime.now()
         main_div = WebDriverWait(driver, 30).until(EC.presence_of_element_located((By.CLASS_NAME, 'salepurchaseonlydisplay_Name_2K2zo')))
-        names  = driver.find_elements(By.CLASS_NAME, 'salepurchaseonlydisplay_Name_2K2zo')
-        prices = driver.find_elements(By.CLASS_NAME, 'salepreviewwidgets_StoreSalePriceBox_Wh0L8')
-        statuses = driver.find_elements(By.CLASS_NAME, 'addtocartbutton_ActionOutOfStock_I_6Pn.CartBtn')
-        for name, price, status in zip(names, prices, statuses):
-            if status.text != 'Out of stock':
-                msg = f"{name.text.split('-')[0]}- {price.text} - {status.text}"
-                send_msg(msg)
+        sale_section = driver.find_elements(By.ID, 'SaleSection_33131')[0].text
+        lines = sale_section.splitlines()
+        for i in range(1, len(lines), 3):
+            if "Out of stock" not in lines[i]:
+                name = lines[i-1].split('-')[0]
+                storage = name.split(' ')[2]
+                price = lines[i+1]
+                if expected_storage !='':
+                    if storage == expected_storage:
+                        msg = f'{name} in stock {price}'
+                        send_msg(msg)
+                else:
+                    msg = f'{name} in stock  {price}'
+                    send_msg(msg)
     except Exception as e:
         msg = f'[Steam Deck] Checking error: {e}'
         send_msg(msg)
     finally:
         driver.quit()
+
 
 if __name__ == '__main__':
     check_stock()
